@@ -7,15 +7,6 @@ import { AppComponent } from './app.component';
 
 
 
-
-
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-import { NgbdModalBasic } from './admin-dashboard/admin-dashboard.component';
-
-
-
-
-
 import { FormsModule } from '@angular/forms';
 //import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
@@ -38,34 +29,17 @@ const appRoutes: Routes = [
     AppComponent,
     FormularComponent,
     AdminDashboardComponent,
-    //NgbdModalBasic
-    
 
   ],
   imports: [
-
-    NgbModule,
-    //AdminDashboardComponent,
     BrowserModule,
     AppRoutingModule,
     FormsModule,
    // HttpModule,
     HttpClientModule,
-    RouterModule.forRoot(appRoutes),
-    //NgbModal
+    RouterModule.forRoot(appRoutes)
   ],
   providers: [HttpRequestService],
-
-  //exports: [NgbdModalBasic],
-
-  bootstrap: [
-    AppComponent,
-    //NgbModule,
-    //NgbdModalBasic
-  ],
- 
+  bootstrap: [AppComponent]
 })
-
 export class AppModule { }
-
-export class NgbdModalBasicModule {}
