@@ -1,0 +1,730 @@
+
+<head>
+        <style>
+                tr { background: rgb(255, 255, 255); } 
+                tr.alt { background: yellow; }
+                
+                #tabId:hover {background: rgb(255, 145, 71);}
+                #tabId {cursor: pointer;}
+             
+                #tabId { border: solid; }
+                #tabId {font-size: 96%;}
+
+                #tabId2:hover {background: rgb(255, 145, 71);}
+                #tabId2 {cursor: pointer;}
+             
+                #tabId2 { border: solid; }
+                input[type=text] {
+                        width: 80%;     
+                }
+                input[type=number] {
+                        width: 80%;     
+                }
+                select {
+                        width: 80%;     
+                }
+                
+                
+
+        </style>
+
+
+        
+</head>
+
+
+
+
+
+<!--
+<header class="animated fadeInDown" id="navbar">  
+                <label>Moinsen</label>
+</header> 
+
+<section class="web_homePage" (scroll)="onWindowScroll($event);">  
+                <label>Moinsen2</label>
+             </section>  
+-->
+
+<!--
+<ng-template #content let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="dateOfBirth">Date of birth</label>
+              <div class="input-group">
+                <input id="dateOfBirth" class="form-control" placeholder="yyyy-mm-dd" name="dp" ngbDatepicker #dp="ngbDatepicker">
+                <input id="idid"  [(ngModel)]="id23" name="inputname" class="form-control" placeholder="yourId">
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button"></button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+        </div>
+</ng-template>-->
+
+<ng-template #content let-modal>
+        <div class="modal-header">
+          <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
+          <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+                <form>
+                        <div class="form-group">
+                                <h2 style="color:rgb(0, 0, 0);">Frage:  </h2>
+                                
+                                <input type="text" [(ngModel)]="question.question" name="frageID" class="form-control" id="frageid" aria-describedby="emailHelp" placeholder="question.question">
+                                <br> 
+                                <br>
+                                
+                
+                                <h2 style="color:rgb(0, 0, 0);" for="exampleInputEmail2">Anmeldungs/Formular-Art:</h2>
+                               
+                                <input type="text" class="form-control" [(ngModel)]="question.formType" id="typeid" name="typKat" placeholder="question.formType" >  <!--ng-options="item for item in names"     $event.target.value-->
+                       
+                                <br> 
+                                <br> 
+                                
+                
+                                <div  *ngIf="editOn">
+                                        <h2 style="color:rgb(0, 0, 0);" for="exampleInputEmail2">NextQuestionId:</h2>
+                                        <input type="number" [(ngModel)]="question.questionType.nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                                        <br>
+                                        <br>
+                                </div>
+                                
+                
+                
+                                <h2 style="color:rgb(0, 0, 0);" for="exampleInputEmail2">Kategorie: </h2>
+                                <div style="padding:10px 00px 00px 40px">
+                                        
+                                        <li *ngFor="let date of fakeCategoryArray; let index = index ">
+                                               
+                                                <label style="color:rgb(0, 0, 0);">Kategorie: {{index}}</label> 
+                                              
+                                                <input type="text" [(ngModel)]="categoryArray[index].category" name="catOpID{{index}}" class="form-control" id="catOp{{index}}" aria-describedby="emailHelp" placeholder="Kategorie:{{index}}">
+                             
+                                        </li>
+                
+                                        <button class="btn btn-success" (click)="addInputCat()" >+</button>
+                                        <button class="btn btn-danger" (click)="deleteInputCat()" >-</button>
+                                </div>
+                                <br>
+                                <br> 
+                                
+                
+                
+                
+                
+                                <h2 for="exampleInputEmail2" style="color:rgb(0, 0, 0);">Antwort-Typ: </h2>
+                                <select class="form-control" [(ngModel)]="question.questionType.type" (change)=" toggleEdit()" name="typ">  
+                                        <option *ngFor="let a of antwortMoeglichkeiten" [ngValue]="a.name" >{{a.name}}</option>
+                                </select>
+                                <br> 
+                
+                                
+                
+                                <div style="padding:10px 00px 00px 40px " *ngIf="radioOn"  >
+                
+                                        <li *ngFor="let daten of fakeChoiceArray; let index = index ">
+                                
+                                                <label style="color:rgb(0, 0, 0);">AntOp: {{index}}</label> 
+                                                <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option:{{index}}">
+                                                <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                                        </li>
+                
+                                        <button class="btn btn-success" (click)="addInput()" >+</button>
+                                        <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                                <br> 
+                                <br> 
+                                </div>
+                        
+                        
+                
+                                <div *ngIf="CheckOn" style="padding:10px 00px 00px 40px ">
+                
+                                                <li *ngFor="let i of fakeChoiceArray; let index = index">   
+                                                        <label style="color:rgb(0, 0, 0);">AntOp: {{i}}</label> 
+                                                        <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option {{index}}">
+                                                        <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                                                </li>
+                                
+                                                <button class="btn btn-success" (click)="addInput()" >+</button>
+                                                <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                                <br> 
+                                <br> 
+                                </div>
+                
+                                
+                
+                                <div *ngIf="TextCheckOn" style="padding:10px 00px 00px 40px ">
+                
+                                                <li *ngFor="let i of fakeChoiceArray; let index = index">   
+                                                        <label style="color:rgb(0, 0, 0);">AntOp: {{index}}</label> 
+                                                        <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option {{index}}">
+                                                        <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                                                </li>
+                                
+                                                <button class="btn btn-success" (click)="addInput()" >+</button>
+                                                <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                                <br> 
+                                <br> 
+                                </div>
+                
+                                
+                
+                
+                                <div *ngIf="TextOn" style="padding:10px 00px 00px 40px ">
+                
+                                                <label style="color:rgb(0, 0, 0);">Hier muss ein Textfeld hin</label>
+                                        <br> 
+                                        <br> 
+                                </div>
+                                
+                
+                               <!-- <label style="color:rgb(0, 0, 0);">Hinweis zur Frage:</label> 
+                                                <input type="text" [(ngModel)]="question.hint" name="hinweisID" class="form-control" id="hinweis" aria-describedby="emailHelp" placeholder="Hinweis eingeben"> -->
+                                <div>
+                                        <h2>Hinweis zur Frage:</h2>    
+                                        <input type="text" [(ngModel)]="question.hint" name="hinweisID" class="form-control" id="hinweis" aria-describedby="emailHelp" placeholder="Hinweis eingeben"> 
+                                </div>
+                
+                                    
+                        </div>
+                
+                
+                  
+                
+                        <button class="btn btn-success" (click)="createQuestion()" >AddQuestion</button>
+                
+                        <div *ngIf="editOn">
+                                <button class="btn btn-success" (click)="editQuestionNextQuestionId()" >EditQuestion</button>
+                        </div>
+                
+                        <div *ngIf="deleteOn">
+                                <button class="btn btn-danger" (click)="deleteQuestion()" >Delete</button>
+                        </div>
+                
+                
+                </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+        </div>
+</ng-template>
+      
+
+
+
+
+
+      <button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+      <div *ngFor="let c of dataDisplay;">
+        <button class="btn btn-lg btn-outline-primary" (click)="open(content);loadQuestion(c)">Edit Question</button>
+      </div>
+      <hr>
+      
+      <pre>{{closeResult}}  |  {{id23}}</pre>
+
+
+
+<!--Style der Seite-->
+<div style="padding:10px 500px 10px 40px; background-color:rgb(112, 129, 224)" >
+
+        <div style="text-align:center">
+                <h3><b>Admin-Dashboard</b></h3>
+                <!-- <img width="140" src="/assets/img/kielStadtLogo.jpg">  -->
+        </div>    
+
+        <br>
+        
+      
+
+ <form>
+        <div class="form-group">
+                <h2 style="color:rgb(0, 0, 0);">Frage:  </h2>
+                
+                <input type="text" [(ngModel)]="question.question" name="frageID" class="form-control" id="frageid" aria-describedby="emailHelp" placeholder="question.question">
+                <br> 
+                <br>
+                
+
+                <h2 style="color:rgb(0, 0, 0);" for="exampleInputEmail2">Anmeldungs/Formular-Art:</h2>
+               
+                <input type="text" class="form-control" [(ngModel)]="question.formType" id="typeid" name="typKat" placeholder="question.formType" >  <!--ng-options="item for item in names"     $event.target.value-->
+       
+                <br> 
+                <br> 
+                
+
+                <div  *ngIf="editOn">
+                        <h2 style="color:rgb(0, 0, 0);" for="exampleInputEmail2">NextQuestionId:</h2>
+                        <input type="number" [(ngModel)]="question.questionType.nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                        <br>
+                        <br>
+                </div>
+                
+
+
+                <h2 style="color:rgb(0, 0, 0);" for="exampleInputEmail2">Kategorie: </h2>
+                <div style="padding:10px 00px 00px 40px">
+                        
+                        <li *ngFor="let date of fakeCategoryArray; let index = index ">
+                               
+                                <label style="color:rgb(0, 0, 0);">Kategorie: {{index}}</label> 
+                              
+                                <input type="text" [(ngModel)]="categoryArray[index].category" name="catOpID{{index}}" class="form-control" id="catOp{{index}}" aria-describedby="emailHelp" placeholder="Kategorie:{{index}}">
+             
+                        </li>
+
+                        <button class="btn btn-success" (click)="addInputCat()" >+</button>
+                        <button class="btn btn-danger" (click)="deleteInputCat()" >-</button>
+                </div>
+                <br>
+                <br> 
+                
+
+
+
+
+                <h2 for="exampleInputEmail2" style="color:rgb(0, 0, 0);">Antwort-Typ: </h2>
+                <select class="form-control" [(ngModel)]="question.questionType.type" (change)=" toggleEdit()" name="typ">  
+                        <option *ngFor="let a of antwortMoeglichkeiten" [ngValue]="a.name" >{{a.name}}</option>
+                </select>
+                <br> 
+
+                
+
+                <div style="padding:10px 00px 00px 40px " *ngIf="radioOn"  >
+
+                        <li *ngFor="let daten of fakeChoiceArray; let index = index ">
+                
+                                <label style="color:rgb(0, 0, 0);">AntOp: {{index}}</label> 
+                                <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option:{{index}}">
+                                <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                        </li>
+
+                        <button class="btn btn-success" (click)="addInput()" >+</button>
+                        <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                <br> 
+                <br> 
+                </div>
+        
+        
+
+                <div *ngIf="CheckOn" style="padding:10px 00px 00px 40px ">
+
+                                <li *ngFor="let i of fakeChoiceArray; let index = index">   
+                                        <label style="color:rgb(0, 0, 0);">AntOp: {{i}}</label> 
+                                        <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option {{index}}">
+                                        <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                                </li>
+                
+                                <button class="btn btn-success" (click)="addInput()" >+</button>
+                                <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                <br> 
+                <br> 
+                </div>
+
+                
+
+                <div *ngIf="TextCheckOn" style="padding:10px 00px 00px 40px ">
+
+                                <li *ngFor="let i of fakeChoiceArray; let index = index">   
+                                        <label style="color:rgb(0, 0, 0);">AntOp: {{index}}</label> 
+                                        <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option {{index}}">
+                                        <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                                </li>
+                
+                                <button class="btn btn-success" (click)="addInput()" >+</button>
+                                <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                <br> 
+                <br> 
+                </div>
+
+                
+
+
+                <div *ngIf="TextOn" style="padding:10px 00px 00px 40px ">
+
+                                <label style="color:rgb(0, 0, 0);">Hier muss ein Textfeld hin</label>
+                        <br> 
+                        <br> 
+                </div>
+                
+
+               <!-- <label style="color:rgb(0, 0, 0);">Hinweis zur Frage:</label> 
+                                <input type="text" [(ngModel)]="question.hint" name="hinweisID" class="form-control" id="hinweis" aria-describedby="emailHelp" placeholder="Hinweis eingeben"> -->
+                <div>
+                        <h2>Hinweis zur Frage:</h2>    
+                        <input type="text" [(ngModel)]="question.hint" name="hinweisID" class="form-control" id="hinweis" aria-describedby="emailHelp" placeholder="Hinweis eingeben"> 
+                </div>
+
+                    
+        </div>
+
+
+  
+
+        <button class="btn btn-success" (click)="createQuestion()" >AddQuestion</button>
+
+        <div *ngIf="editOn">
+                <button class="btn btn-success" (click)="editQuestionNextQuestionId()" >EditQuestion</button>
+        </div>
+
+        <div *ngIf="deleteOn">
+                <button class="btn btn-danger" (click)="deleteQuestion()" >Delete</button>
+        </div>
+
+
+</form>
+
+
+        <br>
+        <br>
+        <br>
+
+
+
+        <h2>Aktueller Fragenkatalog: </h2>
+        <br>
+
+        
+        <button class="btn btn-success" (click)="getAllQuestionsOfFormTypeWithinCategory()" >GetFormTypeCategory</button><button class="btn btn-primary" (click)="getAllQuestion()" >Get All Questions</button>
+                <select class="form-control" (change)="changeCatOn()" [(ngModel)]="chosenFormTypeCat"  name="typ2">  
+                        <option *ngFor="let a of dataSet" [ngValue]="a" >{{a}}</option>
+                </select>
+                <br>
+                <select (change)="getAllQuestionsOfFormTypeWithinCategory()" *ngIf="catOn" class="form-control" [(ngModel)]="chosenCategoryCat"  name="typ2">  
+                        <option *ngFor="let a of dataSetCat" [ngValue]="a" >{{a}}</option>
+                </select>
+        <br>
+
+
+
+        <table id="tableFragen" width="100%">
+                <tr>    <th style="padding:20px"><b>Id:</b></th>
+                        <th><b>Question:</b></th>
+                        <th><b>Hinweis:</b></th>
+                        <th><b>Anmeldungs/<br/>Formular-Art:</b></th>
+                        <th><b>Next<br/>Question<br/>Id:</b></th>
+                        <th><b>Kategorien: </b></th>
+                        <th><b>Antwort-<br/>Typ:</b></th>
+                        <th><b>Antwort-Optionen:</b></th>
+                </tr>
+                
+                <tr id="tabId" *ngFor="let c of dataDisplay; let index = index" (click)="loadQuestion(c)">
+                        <td  style="padding:6px">{{c.id}} </td>
+                        <td>{{c.question}} </td>
+                        <td>{{c.hint}} </td>
+                        <td>{{c.formType}} </td>
+                        <td>{{c.questionType.nextQuestionId}} </td>
+                        <td><ng-container *ngFor="let e of c.questionCategories; let index = index" >- {{e.category}}<br/></ng-container></td>
+                        <td>{{c.questionType.type}} </td>
+                        <ng-container *ngFor="let d of c.questionType.choices; let index = index" >- {{d.choice}} ({{d.nextQuestionId}})<br/></ng-container>
+                        
+                        <button class="btn btn-lg btn-outline-primary" (click)="open(content);loadQuestion(c)">Edit Question</button>
+                        
+                        
+                </tr>
+
+        </table>
+
+
+<!--
+__________________________________________________________________________________________________________________________________        
+-->
+
+
+      
+<!--
+        <br>
+        <br>
+        <br>
+
+        <button class="btn btn-success" (click)="getQuestionById()" >GetQuestionById</button>
+                <select class="form-control" [(ngModel)]="urlById"  name="typ">  
+                        <option *ngFor="let a of data" [ngValue]="a.id" >{{a.id}}</option>
+                </select>
+        <br>
+
+        <div *ngIf="byIdOn">
+                <h2>Eine ausgewählte Question by Id:</h2>
+
+                <table id="tableFragen2" width="100%"   >
+                        <tr>    <th style="padding:20px"><b>Id:</b></th>
+                                <th><b>Frage:</b></th>
+                                <th><b>Kategorie: </b></th>
+                                <th><b>Antwort-Typ:</b></th>
+                                <th><b>Antwort-Optionen</b></th>
+                                <th><b>Hinweis: </b></th>
+                        </tr>
+                        
+                        <tr id="tabId2"  >
+                                <td  style="padding:6px">{{dataOne.id}} </td>
+                                <td>{{dataOne.question}} </td>
+                                <td>{{dataOne.hint}} </td>
+                                <td>{{dataOne.formType}} </td> 
+                                <td>{{dataOne.questionType.type}}</td>
+                                <ng-container *ngFor="let d of dataOne.questionType.choices; let index = index" >- {{d.choice}}<br/></ng-container>
+                                
+                                
+                                
+                        </tr>
+
+                </table>
+        </div>
+
+
+-->
+
+
+
+
+
+
+</div> 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--
+
+<div class="settings">
+        <h2>Label #1</h2>
+        <input type="text" />
+    
+        <label>Long Label #2</label>
+        <span>Display content</span>
+    
+        <label>Label #3</label>
+        <input type="text" />
+ </div>
+
+
+<div style="padding:60px 500px 10px 40px; background-color:rgb(112, 129, 224)" >
+
+
+
+        <div style="text-align:center">
+        <h3><b>Admin-Dashboard</b></h3>
+        <img width="200" src="/assets/img/kielStadtLogo.jpg">
+        </div>    
+
+        <br>
+        <br>
+      
+
+ <form>
+        <div >
+                <div class="settings">
+                         <h2 >Frage:  </h2>
+                
+                         <input type="text" [(ngModel)]="question.question" name="frageID"  id="frageid" placeholder="question.question">
+               </div>
+                <br> 
+          
+                
+                <div class="settings">
+                        <h2 >Anmeldungs/Formular-Art:</h2>
+                        <input type="text" class="form-control" [(ngModel)]="question.formType" id="typeid" name="typKat" placeholder="question.formType" >  
+                </div>
+                <br> 
+                
+                
+
+                <div  *ngIf="editOn">
+                        <h2 style="color:rgb(0, 0, 0);" for="exampleInputEmail2">NextQuestionId:</h2>
+                        <input type="number" [(ngModel)]="question.questionType.nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                </div>
+                <br>
+                <br>
+
+
+                <h2 style="color:rgb(0, 0, 0);" for="exampleInputEmail2">Kategorie: </h2>
+                <br>
+                <div style="padding:10px 00px 00px 40px">
+                        
+                        <li *ngFor="let date of fakeCategoryArray; let index = index ">
+                               
+                                <label style="color:rgb(0, 0, 0);">Kategorie: {{index}}</label> 
+                              
+                                <input type="text" [(ngModel)]="categoryArray[index].category" name="catOpID{{index}}" class="form-control" id="catOp{{index}}" aria-describedby="emailHelp" placeholder="Kategorie:{{index}}">
+             
+                        </li>
+
+                        <button class="btn btn-success" (click)="addInputCat()" >+</button>
+                        <button class="btn btn-danger" (click)="deleteInputCat()" >-</button>
+                </div>
+                <br>
+                <br> 
+                <br> 
+
+
+
+
+                <h2 for="exampleInputEmail2" style="color:rgb(0, 0, 0);">Antwort-Typ: </h2>
+                <select class="form-control" [(ngModel)]="question.questionType.type" (change)=" toggleEdit()" name="typ">  
+                        <option *ngFor="let a of antwortMoeglichkeiten" [ngValue]="a.name" >{{a.name}}</option>
+                </select>
+                <br> 
+
+                
+
+                <div style="padding:10px 00px 00px 40px " *ngIf="radioOn"  >
+
+                        <li *ngFor="let daten of fakeChoiceArray; let index = index ">
+                
+                                <label style="color:rgb(0, 0, 0);">AntOp: {{index}}</label> 
+                                <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option:{{index}}">
+                                <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                        </li>
+
+                        <button class="btn btn-success" (click)="addInput()" >+</button>
+                        <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                </div>
+        
+        
+
+                <div *ngIf="CheckOn" style="padding:10px 00px 00px 40px ">
+
+                                <li *ngFor="let i of fakeChoiceArray; let index = index">   
+                                        <label style="color:rgb(0, 0, 0);">AntOp: {{i}}</label> 
+                                        <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option {{index}}">
+                                        <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                                </li>
+                
+                                <button class="btn btn-success" (click)="addInput()" >+</button>
+                                <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                </div>
+
+                
+
+                <div *ngIf="TextCheckOn" style="padding:10px 00px 00px 40px ">
+
+                                <li *ngFor="let i of fakeChoiceArray; let index = index">   
+                                        <label style="color:rgb(0, 0, 0);">AntOp: {{index}}</label> 
+                                        <input type="text" [(ngModel)]="choiceArray[index].choice" name="antOpID{{index}}" class="form-control" id="antOp{{index}}" aria-describedby="emailHelp" placeholder="Antwort-Option {{index}}">
+                                        <input *ngIf="editOn" type="number" [(ngModel)]="choiceArray[index].nextQuestionId" name="antOpIDNext{{index}}" class="form-control" id="antOpNext{{index}}" aria-describedby="emailHelp" placeholder="NextQeustionId:{{index}}">
+                                </li>
+                
+                                <button class="btn btn-success" (click)="addInput()" >+</button>
+                                <button class="btn btn-danger" (click)="deleteInput()" >-</button>
+                        </div>
+
+                
+
+
+                <div *ngIf="TextOn" style="padding:10px 00px 00px 40px ">
+
+                                <label style="color:rgb(0, 0, 0);">Hier muss ein Textfeld hin</label>
+                </div>
+                <br> 
+                <br> 
+
+                <div>
+                        <h2>Hinweis zur Frage:</h2>    
+                        <input type="text" [(ngModel)]="question.hint" name="hinweisID" class="form-control" id="hinweis" aria-describedby="emailHelp" placeholder="Hinweis eingeben"> 
+                </div>
+
+
+
+
+                <br> 
+
+               
+                
+        </div>
+
+
+  
+
+        <button class="btn btn-success" (click)="createQuestion()" >AddQuestion</button>
+
+        <div *ngIf="editOn">
+                <button class="btn btn-success" (click)="editQuestionNextQuestionId()" >EditQuestion</button>
+        </div>
+
+        <div *ngIf="deleteOn">
+                <button class="btn btn-danger" (click)="deleteQuestion()" >Delete</button>
+        </div>
+
+
+</form>
+        <br>
+        <br>
+        <br>
+
+
+
+        <h2>Aktueller Fragenkatalog: </h2>
+        <br>
+
+        
+        <button class="btn btn-success" (click)="getAllQuestionsOfFormTypeWithinCategory()" >GetFormTypeCategory</button><button class="btn btn-primary" (click)="getAllQuestion()" >Get All Questions</button>
+                <select class="form-control" (change)="changeCatOn()" [(ngModel)]="chosenFormTypeCat"  name="typ2"> 
+                        <option *ngFor="let a of dataSet" [ngValue]="a" >{{a}}</option>
+                </select>
+                <br>
+                <select (change)="getAllQuestionsOfFormTypeWithinCategory()" *ngIf="catOn" class="form-control" [(ngModel)]="chosenCategoryCat"  name="typ2">  
+                        <option *ngFor="let a of dataSetCat" [ngValue]="a" >{{a}}</option>
+                </select>
+        <br>
+
+
+
+        <table id="tableFragen" width="100%">
+                <tr>    <th style="padding:20px"><b>Id:</b></th>
+                        <th><b>Question:</b></th>
+                        <th><b>Hinweis:</b></th>
+                        <th><b>Anmeldungs/<br/>Formular-Art:</b></th>
+                        <th><b>Next<br/>Question<br/>Id:</b></th>
+                        <th><b>Kategorien: </b></th>
+                        <th><b>Antwort-<br/>Typ:</b></th>
+                        <th><b>Antwort-Optionen:</b></th>
+                </tr>
+                
+                <tr id="tabId" *ngFor="let c of dataDisplay; let index = index" (click)="loadQuestion(c)">
+                        <td  style="padding:6px">{{c.id}} </td>
+                        <td>{{c.question}} </td>
+                        <td>{{c.hint}} </td>
+                        <td>{{c.formType}} </td>
+                        <td>{{c.questionType.nextQuestionId}} </td>
+                        <td><ng-container *ngFor="let e of c.questionCategories; let index = index" >- {{e.category}}<br/></ng-container></td>
+                        <td>{{c.questionType.type}} </td>
+                        <ng-container *ngFor="let d of c.questionType.choices; let index = index" >- {{d.choice}} ({{d.nextQuestionId}})<br/></ng-container>
+                
+                        
+                        
+                </tr>
+
+        </table>
+
+      
+
+</div>
+
+-->
